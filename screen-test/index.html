@@ -141,12 +141,16 @@
 
         .logo-particle {
             position: absolute;
-            font-size: 0.8rem;
-            font-weight: 900;
-            color: white;
-            opacity: 0.3;
-            letter-spacing: 0.2rem;
-            font-family: 'Segoe UI', sans-serif;
+            width: 60px;
+            height: auto;
+            opacity: 0.25;
+            filter: brightness(1.2);
+        }
+
+        .logo-particle img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
         @keyframes particleFloat {
@@ -213,7 +217,7 @@
                         animationDelay: `${delay}s`
                     }}
                 >
-                    ZENITH
+                    <img src="https://image.pngaaa.com/836/3403836-middle.png" alt="ZENITH" />
                 </div>
             );
         }
