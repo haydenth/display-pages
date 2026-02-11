@@ -180,7 +180,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useMemo } = React;
 
         function Particle({ delay, left }) {
             return (
@@ -245,11 +245,13 @@
 
             const particles = []; // Removed white particles
 
-            const logoParticles = Array.from({ length: 20 }, (_, i) => ({
-                id: i,
-                delay: i * 2, // Staggered evenly
-                top: 20 + (Math.random() * 60) // Keep in middle area
-            }));
+            const logoParticles = useMemo(() =>
+                Array.from({ length: 20 }, (_, i) => ({
+                    id: i,
+                    delay: i * 2, // Staggered evenly
+                    top: 20 + (Math.random() * 60) // Keep in middle area
+                }))
+            , []); // Empty dependency array = only create once
 
             return (
                 <div className="container">
