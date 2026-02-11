@@ -172,17 +172,17 @@
 
         @keyframes logoFloat {
             0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg);
+                transform: translateX(110vw) translateY(0) rotate(0deg);
                 opacity: 0;
             }
-            10% {
-                opacity: 0.3;
+            5% {
+                opacity: 0.4;
             }
-            90% {
-                opacity: 0.3;
+            95% {
+                opacity: 0.4;
             }
             100% {
-                transform: translateY(-100px) translateX(150px) rotate(360deg);
+                transform: translateX(-20vw) translateY(var(--drift-y)) rotate(720deg);
                 opacity: 0;
             }
         }
@@ -207,13 +207,15 @@
             );
         }
 
-        function LogoParticle({ delay, left }) {
+        function LogoParticle({ delay, top }) {
+            const driftY = (Math.random() - 0.5) * 200; // Random vertical drift -100px to +100px
             return (
                 <div
                     className="logo-particle"
                     style={{
-                        left: `${left}%`,
-                        animation: `logoFloat ${15 + Math.random() * 10}s linear infinite`,
+                        top: `${top}%`,
+                        '--drift-y': `${driftY}px`,
+                        animation: `logoFloat ${12 + Math.random() * 8}s linear infinite`,
                         animationDelay: `${delay}s`
                     }}
                 >
@@ -261,8 +263,8 @@
 
             const logoParticles = Array.from({ length: 12 }, (_, i) => ({
                 id: i,
-                delay: Math.random() * 15,
-                left: Math.random() * 100
+                delay: Math.random() * 20,
+                top: Math.random() * 100
             }));
 
             return (
@@ -272,7 +274,7 @@
                             <Particle key={p.id} delay={p.delay} left={p.left} />
                         ))}
                         {logoParticles.map(p => (
-                            <LogoParticle key={`logo-${p.id}`} delay={p.delay} left={p.left} />
+                            <LogoParticle key={`logo-${p.id}`} delay={p.delay} top={p.top} />
                         ))}
                     </div>
 
