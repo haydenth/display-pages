@@ -139,6 +139,16 @@
             opacity: 0.6;
         }
 
+        .logo-particle {
+            position: absolute;
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: white;
+            opacity: 0.3;
+            letter-spacing: 0.2rem;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
         @keyframes particleFloat {
             0% {
                 transform: translateY(100vh) translateX(0);
@@ -152,6 +162,23 @@
             }
             100% {
                 transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes logoFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) translateX(150px) rotate(360deg);
                 opacity: 0;
             }
         }
@@ -173,6 +200,21 @@
                         animationDelay: `${delay}s`
                     }}
                 />
+            );
+        }
+
+        function LogoParticle({ delay, left }) {
+            return (
+                <div
+                    className="logo-particle"
+                    style={{
+                        left: `${left}%`,
+                        animation: `logoFloat ${15 + Math.random() * 10}s linear infinite`,
+                        animationDelay: `${delay}s`
+                    }}
+                >
+                    ZENITH
+                </div>
             );
         }
 
@@ -213,11 +255,20 @@
                 left: Math.random() * 100
             }));
 
+            const logoParticles = Array.from({ length: 12 }, (_, i) => ({
+                id: i,
+                delay: Math.random() * 15,
+                left: Math.random() * 100
+            }));
+
             return (
                 <div className="container">
                     <div className="particles">
                         {particles.map(p => (
                             <Particle key={p.id} delay={p.delay} left={p.left} />
+                        ))}
+                        {logoParticles.map(p => (
+                            <LogoParticle key={`logo-${p.id}`} delay={p.delay} left={p.left} />
                         ))}
                     </div>
 
