@@ -195,7 +195,7 @@
             );
         }
 
-        function LogoParticle({ delay, top }) {
+        function LogoParticle({ delay, duration, top }) {
             const driftY = (Math.random() - 0.5) * 100; // Slight vertical drift
             return (
                 <div
@@ -203,7 +203,7 @@
                     style={{
                         top: `${top}%`,
                         '--drift-y': `${driftY}px`,
-                        animation: `logoFloat 15s linear infinite`,
+                        animation: `logoFloat ${duration}s linear infinite`,
                         animationDelay: `${delay}s`
                     }}
                 >
@@ -248,7 +248,8 @@
             const logoParticles = useMemo(() =>
                 Array.from({ length: 20 }, (_, i) => ({
                     id: i,
-                    delay: i * 2, // Staggered evenly
+                    delay: -Math.random() * 20, // Negative delay = start mid-animation
+                    duration: 12 + Math.random() * 10, // Random speed 12-22s
                     top: 20 + (Math.random() * 60) // Keep in middle area
                 }))
             , []); // Empty dependency array = only create once
@@ -260,7 +261,7 @@
                             <Particle key={p.id} delay={p.delay} left={p.left} />
                         ))}
                         {logoParticles.map(p => (
-                            <LogoParticle key={`logo-${p.id}`} delay={p.delay} top={p.top} />
+                            <LogoParticle key={`logo-${p.id}`} delay={p.delay} duration={p.duration} top={p.top} />
                         ))}
                     </div>
 
