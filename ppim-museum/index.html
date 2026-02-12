@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0">
     <title>Museum of Post Punk & Industrial Music</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,307 +15,291 @@
         }
 
         body {
-            font-family: 'Courier New', monospace;
+            font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             overflow: hidden;
             background: #000;
             width: 1920px;
             height: 1080px;
+            color: white;
         }
 
         #root {
-            width: 1920px;
-            height: 1080px;
+            width: 100%;
+            height: 100%;
         }
 
-        @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100vh); }
-        }
-
-        @keyframes glitch {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(-100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            50% { opacity: 0.8; }
         }
 
         .container {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #1a0033 0%, #0d0d0d 50%, #330000 100%);
-            display: flex;
-            flex-direction: column;
-            color: #ff00ff;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .scanline {
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: rgba(255, 0, 255, 0.1);
-            animation: scanline 8s linear infinite;
-            pointer-events: none;
-        }
-
-        .noise {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-            pointer-events: none;
-        }
-
-        .header {
-            padding: 60px 80px 40px;
-            border-bottom: 3px solid #ff00ff;
-            animation: slideIn 1s ease-out;
-        }
-
-        .title {
-            font-size: 4.5rem;
-            font-weight: 900;
-            margin-bottom: 1rem;
-            text-shadow:
-                0 0 10px #ff00ff,
-                0 0 20px #ff00ff,
-                0 0 30px #ff00ff,
-                2px 2px 0px #00ffff;
-            letter-spacing: 0.1rem;
-            animation: glitch 3s infinite;
-        }
-
-        .subtitle {
-            font-size: 1.8rem;
-            color: #00ffff;
-            text-shadow: 0 0 10px #00ffff;
-            letter-spacing: 0.3rem;
-            text-transform: uppercase;
-        }
-
-        .content {
+            background: linear-gradient(135deg, #1a0033 0%, #000000 50%, #1a0000 100%);
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            padding: 60px 80px;
-            flex: 1;
+            gap: 0;
+            position: relative;
         }
 
         .left-panel {
+            padding: 60px 80px;
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
         }
 
-        .info-section {
-            background: rgba(255, 0, 255, 0.1);
-            border: 2px solid #ff00ff;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow:
-                inset 0 0 20px rgba(255, 0, 255, 0.2),
-                0 0 20px rgba(255, 0, 255, 0.3);
-        }
-
-        .section-title {
-            font-size: 2rem;
-            color: #ff00ff;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.2rem;
-            border-bottom: 1px solid #ff00ff;
-            padding-bottom: 10px;
-        }
-
-        .section-content {
-            font-size: 1.4rem;
-            color: #00ffff;
-            line-height: 1.6;
-        }
-
-        .highlights {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .highlight-card {
-            background: rgba(0, 255, 255, 0.1);
-            border-left: 4px solid #00ffff;
-            padding: 20px;
-            font-size: 1.3rem;
-            color: #ffffff;
-            transition: all 0.3s ease;
-        }
-
-        .highlight-card:hover {
-            background: rgba(0, 255, 255, 0.2);
-            transform: translateX(10px);
-        }
-
-        .highlight-label {
-            color: #00ffff;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 1rem;
-            letter-spacing: 0.15rem;
-            margin-bottom: 8px;
-        }
-
-        .footer {
-            padding: 40px 80px;
-            border-top: 3px solid #ff00ff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .contact {
-            font-size: 1.6rem;
-            color: #00ffff;
-            text-shadow: 0 0 10px #00ffff;
+        .logo-container {
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-out;
         }
 
         .logo {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: #ff00ff;
-            text-shadow: 0 0 20px #ff00ff;
-            animation: pulse 2s ease-in-out infinite;
+            max-width: 500px;
+            height: auto;
+            filter: drop-shadow(0 0 20px rgba(235, 29, 152, 0.5));
         }
 
-        .award {
-            background: linear-gradient(45deg, #ff00ff, #00ffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 1.8rem;
-            font-weight: 900;
-            text-align: center;
-            padding: 20px;
-            border: 2px solid #ff00ff;
-            border-radius: 10px;
-            animation: pulse 3s ease-in-out infinite;
+        .tagline {
+            font-size: 2rem;
+            color: #eb1d98;
+            font-weight: 700;
+            margin-top: 20px;
+            letter-spacing: 0.1rem;
+            text-transform: uppercase;
         }
 
-        .quote {
-            font-style: italic;
+        .about {
+            margin: 40px 0;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .about-text {
+            font-size: 1.5rem;
+            line-height: 1.7;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .founder {
+            font-size: 1.3rem;
+            color: #eb1d98;
+            font-weight: 600;
+            margin-top: 30px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .stat {
             font-size: 1.2rem;
-            color: #999;
-            margin-top: 15px;
-            padding-left: 20px;
-            border-left: 3px solid #333;
+            color: #aaa;
+        }
+
+        .stat strong {
+            color: #eb1d98;
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .right-panel {
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .badge-container {
+            text-align: center;
+            animation: fadeIn 1.4s ease-out;
+        }
+
+        .badge {
+            max-width: 300px;
+            height: auto;
+            animation: pulse 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(235, 29, 152, 0.6));
+        }
+
+        .offerings {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 40px 0;
+            animation: fadeIn 1.6s ease-out;
+        }
+
+        .offering-card {
+            background: linear-gradient(135deg, rgba(235, 29, 152, 0.15), rgba(0, 0, 0, 0.3));
+            border: 2px solid #eb1d98;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .offering-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(235, 29, 152, 0.4);
+            background: linear-gradient(135deg, rgba(235, 29, 152, 0.25), rgba(0, 0, 0, 0.4));
+        }
+
+        .offering-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #eb1d98;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+        }
+
+        .offering-desc {
+            font-size: 1.1rem;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 1.8s ease-out;
+        }
+
+        .hours {
+            font-size: 1.4rem;
+            color: #eb1d98;
+            font-weight: 700;
+        }
+
+        .contact {
+            text-align: right;
+        }
+
+        .contact-item {
+            font-size: 1.3rem;
+            color: #ffffff;
+            margin: 5px 0;
+        }
+
+        .website {
+            color: #eb1d98;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .location {
+            position: absolute;
+            top: 30px;
+            right: 80px;
+            font-size: 1.4rem;
+            color: #eb1d98;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
         }
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div id="root">
+        <div class="container">
+            <div class="location">Bridgeport, Chicago</div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+            <div class="left-panel">
+                <div class="logo-container">
+                    <img src="https://ppimchicago.com/wp-content/uploads/2023/01/ppim-logo1.png"
+                         alt="PPIM Logo"
+                         class="logo"
+                         crossorigin="anonymous">
+                    <div class="tagline">Museum of Post Punk & Industrial Music</div>
+                </div>
 
-        function App() {
-            const [mounted, setMounted] = useState(false);
-
-            useEffect(() => {
-                setMounted(true);
-            }, []);
-
-            return (
-                <div className="container">
-                    <div className="scanline" />
-                    <div className="noise" />
-
-                    <div className="header">
-                        <div className="title">MUSEUM OF POST PUNK</div>
-                        <div className="title" style={{ marginTop: '-20px' }}>& INDUSTRIAL MUSIC</div>
-                        <div className="subtitle">Bridgeport, Chicago</div>
+                <div class="about">
+                    <div class="about-text">
+                        Founded in 2021, celebrating post-punk and industrial music culture.
+                        A collection of pieces, ephemera, set lists, lyrics, passes, songs, videos,
+                        shirts, posters, art, fashion, and the ideas that glue it all together.
                     </div>
 
-                    <div className="content">
-                        <div className="left-panel">
-                            <div className="info-section">
-                                <div className="section-title">About</div>
-                                <div className="section-content">
-                                    Founded in 2021, celebrating post-punk and industrial music culture.
-                                    Pieces, ephemera, set lists, lyrics, passes, receipts, songs, videos,
-                                    shirts, posters, art, fashion, demos, and ideas that glue it all together.
-                                </div>
-                                <div className="quote">
-                                    "300+ Invisible Records releases • 500+ Pigface members"
-                                </div>
-                            </div>
-
-                            <div className="info-section">
-                                <div className="section-title">Founder</div>
-                                <div className="section-content">
-                                    Martin Atkins - Drummer, music industry figure, founder of Invisible Records
-                                    and the band Pigface
-                                </div>
-                            </div>
-
-                            <div className="award">
-                                ★ BEST MUSEUM ★<br/>
-                                BEST OF CHICAGO 2023
-                            </div>
-                        </div>
-
-                        <div className="highlights">
-                            <div className="highlight-card">
-                                <div className="highlight-label">🎫 Private VIP Tours</div>
-                                Led by Martin Atkins himself
-                            </div>
-
-                            <div className="highlight-card">
-                                <div className="highlight-label">⭐ Ultra VIP Experience</div>
-                                Premium access and guided exploration
-                            </div>
-
-                            <div className="highlight-card">
-                                <div className="highlight-label">🏠 Airbnb Stay</div>
-                                Stay at the PPIM Airbnb
-                            </div>
-
-                            <div className="highlight-card">
-                                <div className="highlight-label">👥 Founder Memberships</div>
-                                Complete access & exclusive tours
-                            </div>
-
-                            <div className="highlight-card">
-                                <div className="highlight-label">🛍️ Shop & Auctions</div>
-                                Rare merchandise & memorabilia
-                            </div>
-
-                            <div className="highlight-card">
-                                <div className="highlight-label">📅 Hours</div>
-                                Appointment only • Special events regularly
-                            </div>
-                        </div>
+                    <div class="founder">
+                        Founded by Martin Atkins
                     </div>
 
-                    <div className="footer">
-                        <div className="contact">invisieu@aol.com</div>
-                        <div className="logo">PPIM CHICAGO</div>
-                        <div className="contact">ppimchicago.com</div>
+                    <div class="stats">
+                        <div class="stat">
+                            <strong>300+</strong>
+                            Invisible Records Releases
+                        </div>
+                        <div class="stat">
+                            <strong>500+</strong>
+                            Pigface Members
+                        </div>
                     </div>
                 </div>
-            );
-        }
+            </div>
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+            <div class="right-panel">
+                <div class="badge-container">
+                    <img src="https://ppimchicago.com/wp-content/uploads/2024/03/BOC23_BESTMUSEUM-300w.png"
+                         alt="Best Museum 2023"
+                         class="badge"
+                         crossorigin="anonymous">
+                </div>
+
+                <div class="offerings">
+                    <div class="offering-card">
+                        <div class="offering-title">🎫 VIP Tours</div>
+                        <div class="offering-desc">Private tours led by Martin Atkins</div>
+                    </div>
+
+                    <div class="offering-card">
+                        <div class="offering-title">⭐ Ultra VIP</div>
+                        <div class="offering-desc">Premium guided experience</div>
+                    </div>
+
+                    <div class="offering-card">
+                        <div class="offering-title">🏠 Airbnb</div>
+                        <div class="offering-desc">Stay at the PPIM location</div>
+                    </div>
+
+                    <div class="offering-card">
+                        <div class="offering-title">👥 Memberships</div>
+                        <div class="offering-desc">Complete access & tours</div>
+                    </div>
+
+                    <div class="offering-card">
+                        <div class="offering-title">🛍️ Shop</div>
+                        <div class="offering-desc">Merchandise & memorabilia</div>
+                    </div>
+
+                    <div class="offering-card">
+                        <div class="offering-title">🎪 Events</div>
+                        <div class="offering-desc">Regular special programming</div>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    <div class="hours">📅 Appointment Only</div>
+                    <div class="contact">
+                        <div class="contact-item">invisieu@aol.com</div>
+                        <div class="contact-item">
+                            <a href="https://ppimchicago.com" class="website">ppimchicago.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
