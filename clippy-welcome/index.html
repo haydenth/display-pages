@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clippy - Office Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #008080;
+            font-family: 'MS Sans Serif', Arial, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .clippy-wrapper {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .clippy {
+            width: 300px;
+            height: 350px;
+            position: relative;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .speech-bubble {
+            position: absolute;
+            left: 320px;
+            top: 50px;
+            background: #FFFFCC;
+            border: 2px solid #000;
+            border-radius: 8px;
+            padding: 25px 30px;
+            min-width: 450px;
+            max-width: 600px;
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 60px;
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-right: 20px solid #000;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            left: -16px;
+            top: 62px;
+            width: 0;
+            height: 0;
+            border-top: 13px solid transparent;
+            border-bottom: 13px solid transparent;
+            border-right: 18px solid #FFFFCC;
+        }
+
+        .speech-text {
+            font-size: 24px;
+            color: #000;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .speech-name {
+            font-size: 18px;
+            color: #666;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .clock-container {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: #C0C0C0;
+            border: 3px ridge #fff;
+            padding: 20px 30px;
+            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        .clock-title {
+            background: #000080;
+            color: #fff;
+            padding: 5px 10px;
+            margin: -20px -30px 15px -30px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .time {
+            font-size: 48px;
+            font-weight: bold;
+            color: #000;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+
+        .date {
+            font-size: 20px;
+            color: #000;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        @keyframes blink {
+            0%, 49%, 100% {
+                opacity: 1;
+            }
+            50%, 99% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="clippy-wrapper">
+            <svg class="clippy" viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
+                <!-- Clippy body (paperclip) -->
+                <g id="clippy-body">
+                    <!-- Outer loop -->
+                    <path d="M 80 40 Q 50 40 50 70 L 50 180 Q 50 210 80 210 Q 110 210 110 180 L 110 90"
+                          fill="none" stroke="#4A90E2" stroke-width="20" stroke-linecap="round"/>
+
+                    <!-- Inner loop -->
+                    <path d="M 110 90 Q 110 60 140 60 Q 170 60 170 90 L 170 160 Q 170 190 140 190"
+                          fill="none" stroke="#5AA4F0" stroke-width="20" stroke-linecap="round"/>
+
+                    <!-- Highlight shine -->
+                    <path d="M 65 50 Q 60 50 60 70 L 60 180 Q 60 200 75 200"
+                          fill="none" stroke="#A8D5FF" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
+
+                    <!-- Eyes container -->
+                    <g id="eyes">
+                        <!-- Left eye background -->
+                        <ellipse cx="75" cy="120" rx="18" ry="22" fill="#fff" stroke="#000" stroke-width="2"/>
+                        <!-- Left pupil -->
+                        <ellipse id="left-pupil" cx="78" cy="123" rx="8" ry="10" fill="#000">
+                            <animate attributeName="cy" values="123;120;123" dur="3s" repeatCount="indefinite"/>
+                        </ellipse>
+                        <!-- Left shine -->
+                        <circle cx="73" cy="118" r="4" fill="#fff"/>
+
+                        <!-- Right eye background -->
+                        <ellipse cx="115" cy="120" rx="18" ry="22" fill="#fff" stroke="#000" stroke-width="2"/>
+                        <!-- Right pupil -->
+                        <ellipse id="right-pupil" cx="118" cy="123" rx="8" ry="10" fill="#000">
+                            <animate attributeName="cy" values="123;120;123" dur="3s" repeatCount="indefinite"/>
+                        </ellipse>
+                        <!-- Right shine -->
+                        <circle cx="113" cy="118" r="4" fill="#fff"/>
+                    </g>
+
+                    <!-- Eyebrows -->
+                    <g id="eyebrows">
+                        <path d="M 60 105 Q 75 100 90 105" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round">
+                            <animate attributeName="d"
+                                     values="M 60 105 Q 75 100 90 105;M 60 100 Q 75 95 90 100;M 60 105 Q 75 100 90 105"
+                                     dur="4s" repeatCount="indefinite"/>
+                        </path>
+                        <path d="M 100 105 Q 115 100 130 105" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round">
+                            <animate attributeName="d"
+                                     values="M 100 105 Q 115 100 130 105;M 100 100 Q 115 95 130 100;M 100 105 Q 115 100 130 105"
+                                     dur="4s" repeatCount="indefinite"/>
+                        </path>
+                    </g>
+
+                    <!-- Smile -->
+                    <path d="M 70 145 Q 95 155 120 145" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+                </g>
+            </svg>
+
+            <div class="speech-bubble">
+                <div class="speech-text" id="message">
+                    Hi! It looks like you're starting your workday. Would you like help with that?
+                </div>
+                <div class="speech-name">— Clippy, Your Office Assistant</div>
+            </div>
+        </div>
+
+        <div class="clock-container">
+            <div class="clock-title">Current Time</div>
+            <div class="time" id="time">00:00:00</div>
+            <div class="date" id="date">Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            "Hi! It looks like you're starting your workday. Would you like help with that?",
+            "Welcome back! Ready to get some work done today?",
+            "Good morning! I'm here to help you be productive!",
+            "It looks like you're writing a letter. Would you like help? (Just kidding!)",
+            "Did you know? You can press Ctrl+S to save your work!",
+            "Tip of the day: Take regular breaks to stay fresh and focused!",
+            "I see you're looking at me. Need any assistance?",
+            "Having a great day? Let me know if you need anything!",
+            "Remember: There's no 'I' in 'team', but there is in 'Clippy'!",
+            "Pro tip: Stay hydrated and take breaks every hour!",
+            "You're doing great! Keep up the good work!",
+            "Coffee break time? Don't forget to save your work first!"
+        ];
+
+        let currentMessageIndex = 0;
+
+        function updateMessage() {
+            const messageEl = document.getElementById('message');
+            messageEl.style.opacity = 0;
+
+            setTimeout(() => {
+                currentMessageIndex = (currentMessageIndex + 1) % messages.length;
+                messageEl.textContent = messages[currentMessageIndex];
+                messageEl.style.opacity = 1;
+            }, 500);
+        }
+
+        // Rotate messages every 8 seconds
+        setInterval(updateMessage, 8000);
+
+        // Clock update
+        function updateClock() {
+            const now = new Date();
+
+            // Time
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('time').textContent = `${hours}:${minutes}:${seconds}`;
+
+            // Date
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const dayName = days[now.getDay()];
+            const monthName = months[now.getMonth()];
+            const date = now.getDate();
+            const year = now.getFullYear();
+            document.getElementById('date').textContent = `${dayName}, ${monthName} ${date}, ${year}`;
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Fade transition for messages
+        document.getElementById('message').style.transition = 'opacity 0.5s ease';
+    </script>
+</body>
+</html>
