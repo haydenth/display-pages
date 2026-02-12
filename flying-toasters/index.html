@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flying Toasters - After Dark Tribute</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            height: 100vh;
+            font-family: 'Courier New', monospace;
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .clock-container {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            background: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
+            border: 4px solid #fff;
+            border-radius: 20px;
+            padding: 30px 40px;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.6);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(255, 0, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(255, 0, 255, 1), 0 0 80px rgba(0, 255, 255, 0.8);
+            }
+        }
+
+        .time {
+            font-size: 72px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow:
+                0 0 10px #ff00ff,
+                0 0 20px #00ffff,
+                3px 3px 0 #000;
+            letter-spacing: 4px;
+        }
+
+        .date {
+            font-size: 28px;
+            color: #fff;
+            text-align: center;
+            margin-top: 10px;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .title {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 36px;
+            color: #00ffff;
+            text-shadow:
+                0 0 10px #00ffff,
+                0 0 20px #ff00ff,
+                2px 2px 0 #000;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.8;
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1.05);
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="stars"></canvas>
+    <canvas id="toasters"></canvas>
+
+    <div class="clock-container">
+        <div class="time" id="time">00:00:00</div>
+        <div class="date" id="date">Loading...</div>
+    </div>
+
+    <div class="title">✨ FLYING TOASTERS ✨</div>
+
+    <script>
+        // Star field background
+        const starsCanvas = document.getElementById('stars');
+        const starsCtx = starsCanvas.getContext('2d');
+        starsCanvas.width = window.innerWidth;
+        starsCanvas.height = window.innerHeight;
+
+        const stars = [];
+        for (let i = 0; i < 200; i++) {
+            stars.push({
+                x: Math.random() * starsCanvas.width,
+                y: Math.random() * starsCanvas.height,
+                size: Math.random() * 2,
+                speed: Math.random() * 0.5 + 0.1
+            });
+        }
+
+        function drawStars() {
+            starsCtx.fillStyle = '#000';
+            starsCtx.fillRect(0, 0, starsCanvas.width, starsCanvas.height);
+
+            stars.forEach(star => {
+                starsCtx.fillStyle = '#fff';
+                starsCtx.fillRect(star.x, star.y, star.size, star.size);
+
+                star.x -= star.speed;
+                if (star.x < 0) {
+                    star.x = starsCanvas.width;
+                    star.y = Math.random() * starsCanvas.height;
+                }
+            });
+
+            requestAnimationFrame(drawStars);
+        }
+        drawStars();
+
+        // Toasters canvas
+        const canvas = document.getElementById('toasters');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Toaster and toast objects
+        const toasters = [];
+        const toasts = [];
+
+        class Toaster {
+            constructor() {
+                this.x = canvas.width + 100;
+                this.y = Math.random() * (canvas.height - 200) + 100;
+                this.speed = Math.random() * 1.5 + 0.8;
+                this.wingFlap = 0;
+                this.size = 80;
+            }
+
+            draw() {
+                // Toaster body
+                ctx.fillStyle = '#C0C0C0';
+                ctx.fillRect(this.x - 40, this.y - 30, 80, 60);
+
+                // Toaster shine
+                ctx.fillStyle = '#E8E8E8';
+                ctx.fillRect(this.x - 35, this.y - 25, 20, 50);
+
+                // Toaster slots
+                ctx.fillStyle = '#333';
+                ctx.fillRect(this.x - 25, this.y - 20, 15, 40);
+                ctx.fillRect(this.x + 10, this.y - 20, 15, 40);
+
+                // Wings
+                const wingY = Math.sin(this.wingFlap) * 10;
+
+                // Left wing
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.ellipse(this.x - 50, this.y + wingY, 30, 15, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#FFA500';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Right wing
+                ctx.beginPath();
+                ctx.ellipse(this.x + 50, this.y + wingY, 30, 15, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Toast poking out
+                ctx.fillStyle = '#D2691E';
+                ctx.fillRect(this.x - 20, this.y - 40, 12, 15);
+                ctx.fillRect(this.x + 8, this.y - 40, 12, 15);
+
+                // Toast highlights
+                ctx.fillStyle = '#F4A460';
+                ctx.fillRect(this.x - 18, this.y - 38, 3, 10);
+                ctx.fillRect(this.x + 10, this.y - 38, 3, 10);
+            }
+
+            update() {
+                this.x -= this.speed;
+                this.wingFlap += 0.15;
+
+                // Occasionally launch toast
+                if (Math.random() < 0.01) {
+                    toasts.push(new Toast(this.x, this.y - 40));
+                }
+
+                return this.x > -100;
+            }
+        }
+
+        class Toast {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = -3 - Math.random() * 2;
+                this.rotation = 0;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.2;
+                this.gravity = 0.1;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+
+                // Toast
+                ctx.fillStyle = '#D2691E';
+                ctx.fillRect(-10, -15, 20, 30);
+
+                // Toast highlights
+                ctx.fillStyle = '#F4A460';
+                ctx.fillRect(-8, -13, 4, 26);
+
+                ctx.restore();
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedY += this.gravity;
+                this.rotation += this.rotationSpeed;
+
+                return this.y < canvas.height + 50;
+            }
+        }
+
+        // Spawn toasters
+        setInterval(() => {
+            toasters.push(new Toaster());
+        }, 2000);
+
+        // Initial toasters
+        for (let i = 0; i < 3; i++) {
+            const toaster = new Toaster();
+            toaster.x = Math.random() * canvas.width;
+            toasters.push(toaster);
+        }
+
+        // Animation loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update and draw toasters
+            for (let i = toasters.length - 1; i >= 0; i--) {
+                if (!toasters[i].update()) {
+                    toasters.splice(i, 1);
+                } else {
+                    toasters[i].draw();
+                }
+            }
+
+            // Update and draw toast
+            for (let i = toasts.length - 1; i >= 0; i--) {
+                if (!toasts[i].update()) {
+                    toasts.splice(i, 1);
+                } else {
+                    toasts[i].draw();
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Clock update
+        function updateClock() {
+            const now = new Date();
+
+            // Time
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('time').textContent = `${hours}:${minutes}:${seconds}`;
+
+            // Date
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const dayName = days[now.getDay()];
+            const monthName = months[now.getMonth()];
+            const date = now.getDate();
+            const year = now.getFullYear();
+            document.getElementById('date').textContent = `${dayName}, ${monthName} ${date}, ${year}`;
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            starsCanvas.width = window.innerWidth;
+            starsCanvas.height = window.innerHeight;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
