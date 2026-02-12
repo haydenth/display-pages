@@ -27,67 +27,37 @@
 
         .clock-container {
             position: absolute;
-            top: 40px;
-            right: 40px;
-            background: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
-            border: 4px solid #fff;
-            border-radius: 20px;
-            padding: 30px 40px;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.6);
-            animation: glow 2s ease-in-out infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% {
-                box-shadow: 0 0 30px rgba(255, 0, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.6);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(255, 0, 255, 1), 0 0 80px rgba(0, 255, 255, 0.8);
-            }
+            top: 20px;
+            right: 20px;
+            background: #111;
+            border: 2px solid #555;
+            padding: 15px 25px;
         }
 
         .time {
-            font-size: 72px;
-            font-weight: bold;
-            color: #fff;
-            text-shadow:
-                0 0 10px #ff00ff,
-                0 0 20px #00ffff,
-                3px 3px 0 #000;
-            letter-spacing: 4px;
+            font-size: 48px;
+            font-weight: normal;
+            color: #33ff33;
+            letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
         }
 
         .date {
-            font-size: 28px;
-            color: #fff;
+            font-size: 18px;
+            color: #999;
             text-align: center;
-            margin-top: 10px;
-            text-shadow: 2px 2px 0 #000;
+            margin-top: 5px;
+            font-family: 'Courier New', monospace;
         }
 
         .title {
             position: absolute;
-            bottom: 40px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 36px;
-            color: #00ffff;
-            text-shadow:
-                0 0 10px #00ffff,
-                0 0 20px #ff00ff,
-                2px 2px 0 #000;
-            animation: pulse 3s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 0.8;
-                transform: translateX(-50%) scale(1);
-            }
-            50% {
-                opacity: 1;
-                transform: translateX(-50%) scale(1.05);
-            }
+            font-size: 24px;
+            color: #666;
+            font-family: 'Courier New', monospace;
         }
     </style>
 </head>
@@ -100,7 +70,7 @@
         <div class="date" id="date">Loading...</div>
     </div>
 
-    <div class="title">✨ FLYING TOASTERS ✨</div>
+    <div class="title">Flying Toasters</div>
 
     <script>
         // Star field background
@@ -110,12 +80,12 @@
         starsCanvas.height = window.innerHeight;
 
         const stars = [];
-        for (let i = 0; i < 200; i++) {
+        for (let i = 0; i < 50; i++) {
             stars.push({
                 x: Math.random() * starsCanvas.width,
                 y: Math.random() * starsCanvas.height,
-                size: Math.random() * 2,
-                speed: Math.random() * 0.5 + 0.1
+                size: 1,
+                speed: Math.random() * 0.2 + 0.05
             });
         }
 
@@ -158,46 +128,77 @@
             }
 
             draw() {
-                // Toaster body
-                ctx.fillStyle = '#C0C0C0';
-                ctx.fillRect(this.x - 40, this.y - 30, 80, 60);
+                const wingY = Math.sin(this.wingFlap) * 8;
 
-                // Toaster shine
-                ctx.fillStyle = '#E8E8E8';
-                ctx.fillRect(this.x - 35, this.y - 25, 20, 50);
-
-                // Toaster slots
-                ctx.fillStyle = '#333';
-                ctx.fillRect(this.x - 25, this.y - 20, 15, 40);
-                ctx.fillRect(this.x + 10, this.y - 20, 15, 40);
-
-                // Wings
-                const wingY = Math.sin(this.wingFlap) * 10;
-
+                // White angel wings (draw first, behind toaster)
                 // Left wing
-                ctx.fillStyle = '#FFD700';
+                ctx.fillStyle = '#fff';
                 ctx.beginPath();
-                ctx.ellipse(this.x - 50, this.y + wingY, 30, 15, 0, 0, Math.PI * 2);
+                ctx.ellipse(this.x - 45, this.y + wingY, 35, 12, -0.3, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.strokeStyle = '#FFA500';
-                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#ccc';
+                ctx.lineWidth = 1;
                 ctx.stroke();
+
+                // Wing feathers (left)
+                ctx.strokeStyle = '#ddd';
+                for (let i = 0; i < 4; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(this.x - 45, this.y + wingY);
+                    ctx.lineTo(this.x - 60 - i * 3, this.y + wingY + 5);
+                    ctx.stroke();
+                }
 
                 // Right wing
+                ctx.fillStyle = '#fff';
                 ctx.beginPath();
-                ctx.ellipse(this.x + 50, this.y + wingY, 30, 15, 0, 0, Math.PI * 2);
+                ctx.ellipse(this.x + 45, this.y + wingY, 35, 12, 0.3, 0, Math.PI * 2);
                 ctx.fill();
+                ctx.strokeStyle = '#ccc';
+                ctx.lineWidth = 1;
                 ctx.stroke();
 
-                // Toast poking out
-                ctx.fillStyle = '#D2691E';
-                ctx.fillRect(this.x - 20, this.y - 40, 12, 15);
-                ctx.fillRect(this.x + 8, this.y - 40, 12, 15);
+                // Wing feathers (right)
+                ctx.strokeStyle = '#ddd';
+                for (let i = 0; i < 4; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(this.x + 45, this.y + wingY);
+                    ctx.lineTo(this.x + 60 + i * 3, this.y + wingY + 5);
+                    ctx.stroke();
+                }
 
-                // Toast highlights
-                ctx.fillStyle = '#F4A460';
-                ctx.fillRect(this.x - 18, this.y - 38, 3, 10);
-                ctx.fillRect(this.x + 10, this.y - 38, 3, 10);
+                // Chrome toaster body - main
+                ctx.fillStyle = '#B8B8B8';
+                ctx.fillRect(this.x - 35, this.y - 25, 70, 50);
+
+                // Chrome highlights
+                ctx.fillStyle = '#E8E8E8';
+                ctx.fillRect(this.x - 30, this.y - 20, 15, 40);
+
+                // Chrome shadows
+                ctx.fillStyle = '#888';
+                ctx.fillRect(this.x + 15, this.y - 20, 15, 40);
+
+                // Toaster slots (dark)
+                ctx.fillStyle = '#222';
+                ctx.fillRect(this.x - 22, this.y - 18, 12, 36);
+                ctx.fillRect(this.x + 10, this.y - 18, 12, 36);
+
+                // Slot highlights
+                ctx.fillStyle = '#444';
+                ctx.fillRect(this.x - 21, this.y - 17, 2, 34);
+                ctx.fillRect(this.x + 11, this.y - 17, 2, 34);
+
+                // Toast poking out (simple tan bread)
+                ctx.fillStyle = '#D2B48C';
+                ctx.fillRect(this.x - 20, this.y - 35, 10, 12);
+                ctx.fillRect(this.x + 10, this.y - 35, 10, 12);
+
+                // Toast crust
+                ctx.strokeStyle = '#8B7355';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(this.x - 20, this.y - 35, 10, 12);
+                ctx.strokeRect(this.x + 10, this.y - 35, 10, 12);
             }
 
             update() {
@@ -229,13 +230,14 @@
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.rotation);
 
-                // Toast
-                ctx.fillStyle = '#D2691E';
-                ctx.fillRect(-10, -15, 20, 30);
+                // Simple tan bread toast
+                ctx.fillStyle = '#D2B48C';
+                ctx.fillRect(-8, -12, 16, 24);
 
-                // Toast highlights
-                ctx.fillStyle = '#F4A460';
-                ctx.fillRect(-8, -13, 4, 26);
+                // Toast crust outline
+                ctx.strokeStyle = '#8B7355';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(-8, -12, 16, 24);
 
                 ctx.restore();
             }
