@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouncing Ball - Right Screen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: white;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+
+        .ball {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: black;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: opacity 0.1s ease;
+        }
+
+        .label {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Arial', sans-serif;
+            font-size: 24px;
+            color: #ccc;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ball" id="ball"></div>
+    <div class="label">RIGHT SCREEN</div>
+
+    <script>
+        const ball = document.getElementById('ball');
+        const CYCLE_TIME = 8000; // 8 seconds for full cycle
+        const SCREEN_WIDTH = window.innerWidth;
+
+        function updateBall() {
+            const now = Date.now();
+            const cyclePosition = (now % CYCLE_TIME) / CYCLE_TIME; // 0 to 1
+
+            let x = 0;
+            let visible = false;
+
+            // Cycle phases:
+            // 0.00 - 0.25: Ball moves left to right on LEFT screen
+            // 0.25 - 0.50: Ball moves left to right on RIGHT screen
+            // 0.50 - 0.75: Ball moves right to left on RIGHT screen
+            // 0.75 - 1.00: Ball moves right to left on LEFT screen
+
+            if (cyclePosition >= 0.25 && cyclePosition < 0.50) {
+                // Phase 2: Moving left to right on RIGHT screen
+                const phase = (cyclePosition - 0.25) / 0.25; // 0 to 1
+                x = easeInOutQuad(phase) * SCREEN_WIDTH;
+                visible = true;
+            } else if (cyclePosition >= 0.50 && cyclePosition < 0.75) {
+                // Phase 3: Moving right to left on RIGHT screen
+                const phase = (cyclePosition - 0.50) / 0.25; // 0 to 1
+                x = SCREEN_WIDTH - (easeInOutQuad(phase) * SCREEN_WIDTH);
+                visible = true;
+            } else {
+                // Ball is on LEFT screen
+                visible = false;
+            }
+
+            ball.style.left = `${x}px`;
+            ball.style.opacity = visible ? '1' : '0';
+
+            requestAnimationFrame(updateBall);
+        }
+
+        // Easing function for smooth motion
+        function easeInOutQuad(t) {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        }
+
+        // Start animation
+        updateBall();
+    </script>
+</body>
+</html>
