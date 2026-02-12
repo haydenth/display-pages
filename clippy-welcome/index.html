@@ -184,39 +184,65 @@
     <div class="desktop">
         <!-- Clippy and Speech Bubble -->
         <div class="clippy-wrapper">
-            <svg class="clippy" viewBox="0 0 200 250">
+            <svg class="clippy" viewBox="0 0 200 280">
+                <defs>
+                    <linearGradient id="clipGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#9BA4C8;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#C5C9E0;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#7882A8;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+
                 <g id="clippy-body">
-                    <path d="M 80 40 Q 50 40 50 70 L 50 180 Q 50 210 80 210 Q 110 210 110 180 L 110 90"
-                          fill="none" stroke="#4A90E2" stroke-width="20" stroke-linecap="round"/>
-                    <path d="M 110 90 Q 110 60 140 60 Q 170 60 170 90 L 170 160 Q 170 190 140 190"
-                          fill="none" stroke="#5AA4F0" stroke-width="20" stroke-linecap="round"/>
-                    <path d="M 65 50 Q 60 50 60 70 L 60 180 Q 60 200 75 200"
-                          fill="none" stroke="#A8D5FF" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
+                    <!-- Main paperclip body - outer loop -->
+                    <path d="M 85 80 Q 55 80 55 110 L 55 200 Q 55 230 85 230 Q 115 230 115 200 L 115 120"
+                          fill="none" stroke="url(#clipGrad)" stroke-width="18" stroke-linecap="round"/>
 
-                    <g id="eyes">
-                        <ellipse cx="75" cy="120" rx="18" ry="22" fill="#fff" stroke="#000" stroke-width="2"/>
-                        <ellipse id="left-pupil" cx="78" cy="123" rx="8" ry="10" fill="#000">
-                            <animate attributeName="cy" values="123;120;123" dur="3s" repeatCount="indefinite"/>
-                        </ellipse>
-                        <circle cx="73" cy="118" r="4" fill="#fff"/>
+                    <!-- Inner loop -->
+                    <path d="M 115 120 Q 115 90 145 90 Q 175 90 175 120 L 175 180 Q 175 210 145 210"
+                          fill="none" stroke="url(#clipGrad)" stroke-width="18" stroke-linecap="round"/>
 
-                        <ellipse cx="115" cy="120" rx="18" ry="22" fill="#fff" stroke="#000" stroke-width="2"/>
-                        <ellipse id="right-pupil" cx="118" cy="123" rx="8" ry="10" fill="#000">
-                            <animate attributeName="cy" values="123;120;123" dur="3s" repeatCount="indefinite"/>
+                    <!-- Highlight on outer loop -->
+                    <path d="M 70 85 Q 60 85 60 110 L 60 200 Q 60 220 80 225"
+                          fill="none" stroke="#E8EBFA" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+
+                    <!-- EYE STALKS (this is what I was missing!) -->
+                    <!-- Left eye stalk -->
+                    <ellipse cx="80" cy="65" rx="8" ry="25" fill="#9BA4C8" stroke="#7882A8" stroke-width="1.5"/>
+                    <ellipse cx="80" cy="62" rx="6" ry="20" fill="#C5C9E0" opacity="0.5"/>
+
+                    <!-- Right eye stalk -->
+                    <ellipse cx="125" cy="70" rx="8" ry="28" fill="#9BA4C8" stroke="#7882A8" stroke-width="1.5"/>
+                    <ellipse cx="125" cy="67" rx="6" ry="23" fill="#C5C9E0" opacity="0.5"/>
+
+                    <!-- EYES ON STALKS -->
+                    <!-- Left eye -->
+                    <g id="left-eye">
+                        <circle cx="80" cy="40" r="22" fill="#fff" stroke="#000" stroke-width="2"/>
+                        <circle cx="80" cy="40" r="18" fill="#fff"/>
+                        <ellipse id="left-pupil" cx="82" cy="42" rx="10" ry="12" fill="#000">
+                            <animate attributeName="cy" values="42;40;42" dur="3s" repeatCount="indefinite"/>
                         </ellipse>
-                        <circle cx="113" cy="118" r="4" fill="#fff"/>
+                        <circle cx="77" cy="37" r="5" fill="#fff"/>
                     </g>
 
-                    <g id="eyebrows">
-                        <path d="M 60 105 Q 75 100 90 105" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round">
-                            <animate attributeName="d" values="M 60 105 Q 75 100 90 105;M 60 100 Q 75 95 90 100;M 60 105 Q 75 100 90 105" dur="4s" repeatCount="indefinite"/>
-                        </path>
-                        <path d="M 100 105 Q 115 100 130 105" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round">
-                            <animate attributeName="d" values="M 100 105 Q 115 100 130 105;M 100 100 Q 115 95 130 100;M 100 105 Q 115 100 130 105" dur="4s" repeatCount="indefinite"/>
-                        </path>
+                    <!-- Right eye -->
+                    <g id="right-eye">
+                        <circle cx="125" cy="45" r="22" fill="#fff" stroke="#000" stroke-width="2"/>
+                        <circle cx="125" cy="45" r="18" fill="#fff"/>
+                        <ellipse id="right-pupil" cx="127" cy="47" rx="10" ry="12" fill="#000">
+                            <animate attributeName="cy" values="47;45;47" dur="3s" repeatCount="indefinite"/>
+                        </ellipse>
+                        <circle cx="122" cy="42" r="5" fill="#fff"/>
                     </g>
 
-                    <path d="M 70 145 Q 95 155 120 145" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+                    <!-- EYEBROWS -->
+                    <path d="M 60 32 Q 75 27 88 30" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round">
+                        <animate attributeName="d" values="M 60 32 Q 75 27 88 30;M 60 28 Q 75 23 88 26;M 60 32 Q 75 27 88 30" dur="4s" repeatCount="indefinite"/>
+                    </path>
+                    <path d="M 115 35 Q 130 32 145 36" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round">
+                        <animate attributeName="d" values="M 115 35 Q 130 32 145 36;M 115 31 Q 130 28 145 32;M 115 35 Q 130 32 145 36" dur="4s" repeatCount="indefinite"/>
+                    </path>
                 </g>
             </svg>
 
