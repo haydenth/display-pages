@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portillo's - Unrivaled Chicago Street Food</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo-section {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .logo {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 72px;
+            color: #D7282F;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            font-weight: bold;
+            font-style: italic;
+            letter-spacing: 2px;
+        }
+
+        .tagline {
+            font-size: 24px;
+            color: #f4f4f4;
+            text-align: center;
+            margin-top: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-family: 'Arial', sans-serif;
+            font-weight: 300;
+        }
+
+        .feature-container {
+            width: 90%;
+            max-width: 1400px;
+            height: 65%;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .feature-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            gap: 60px;
+            padding: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(215, 40, 47, 0.3);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .feature-card.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .feature-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-right: 40px;
+        }
+
+        .feature-title {
+            font-size: 64px;
+            color: #D7282F;
+            margin-bottom: 30px;
+            font-weight: bold;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .feature-description {
+            font-size: 28px;
+            line-height: 1.6;
+            color: #f4f4f4;
+            margin-bottom: 40px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .feature-highlights {
+            list-style: none;
+        }
+
+        .feature-highlights li {
+            font-size: 24px;
+            color: #FFD700;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .feature-highlights li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #D7282F;
+            font-weight: bold;
+            font-size: 28px;
+        }
+
+        .feature-right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .feature-image {
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 10px 30px rgba(215, 40, 47, 0.4));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .progress-dots {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #D7282F;
+            transform: scale(1.3);
+        }
+
+        .accent-line {
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, #D7282F, #FFD700);
+            margin-bottom: 20px;
+            border-radius: 2px;
+        }
+
+        /* Decorative elements */
+        .deco-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(215, 40, 47, 0.2), transparent);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .deco-circle-1 {
+            width: 400px;
+            height: 400px;
+            top: -100px;
+            right: -100px;
+        }
+
+        .deco-circle-2 {
+            width: 300px;
+            height: 300px;
+            bottom: -50px;
+            left: -50px;
+            animation-delay: 2s;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="deco-circle deco-circle-1"></div>
+        <div class="deco-circle deco-circle-2"></div>
+
+        <div class="logo-section">
+            <div class="logo">Portillo's</div>
+            <div class="tagline">Unrivaled Chicago Street Food</div>
+        </div>
+
+        <div class="feature-container">
+            <!-- Italian Beef Feature -->
+            <div class="feature-card" id="card-0">
+                <div class="feature-left">
+                    <div class="accent-line"></div>
+                    <h2 class="feature-title">Italian Beef Sandwich</h2>
+                    <p class="feature-description">
+                        Our legendary Italian beef is slow-roasted for four hours, creating a juicy,
+                        succulent masterpiece stuffed inside warm Turano French bread.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>Slow roasted for 4 hours</li>
+                        <li>Authentic Turano French bread</li>
+                        <li>Drizzled with rich beef gravy</li>
+                        <li>Add hot or sweet peppers</li>
+                    </ul>
+                </div>
+                <div class="feature-right">
+                    <div class="feature-image" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23D7282F%22 width=%22400%22 height=%22300%22 rx=%2220%22/><text x=%22200%22 y=%22160%22 font-family=%22Arial%22 font-size=%2260%22 fill=%22white%22 text-anchor=%22middle%22>🥖</text></svg>')"></div>
+                </div>
+            </div>
+
+            <!-- Chicago-Style Hot Dog Feature -->
+            <div class="feature-card" id="card-1">
+                <div class="feature-left">
+                    <div class="accent-line"></div>
+                    <h2 class="feature-title">Chicago-Style Hot Dog</h2>
+                    <p class="feature-description">
+                        The iconic Chicago flavor! Piled high with mustard, relish, onions, tomatoes,
+                        pickle, sport peppers, and celery salt on a steamed poppy seed bun.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>Steamed poppy seed bun</li>
+                        <li>7 classic toppings</li>
+                        <li>Sport peppers kick</li>
+                        <li>True Chicago tradition</li>
+                    </ul>
+                </div>
+                <div class="feature-right">
+                    <div class="feature-image" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%238B4513%22 width=%22400%22 height=%22300%22 rx=%2220%22/><text x=%22200%22 y=%22160%22 font-family=%22Arial%22 font-size=%2260%22 fill=%22white%22 text-anchor=%22middle%22>🌭</text></svg>')"></div>
+                </div>
+            </div>
+
+            <!-- Chocolate Cake Feature -->
+            <div class="feature-card" id="card-2">
+                <div class="feature-left">
+                    <div class="accent-line"></div>
+                    <h2 class="feature-title">Famous Chocolate Cake</h2>
+                    <p class="feature-description">
+                        A decadent slice of rich, moist chocolate cake topped with smooth chocolate
+                        frosting. Or try it blended into our legendary Chocolate Cake Shake!
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>Rich & moist perfection</li>
+                        <li>Smooth chocolate frosting</li>
+                        <li>Also in shake form</li>
+                        <li>Perfect sweet finish</li>
+                    </ul>
+                </div>
+                <div class="feature-right">
+                    <div class="feature-image" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%234A2511%22 width=%22400%22 height=%22300%22 rx=%2220%22/><text x=%22200%22 y=%22160%22 font-family=%22Arial%22 font-size=%2260%22 fill=%22white%22 text-anchor=%22middle%22>🍰</text></svg>')"></div>
+                </div>
+            </div>
+
+            <!-- Spicy Chicken Feature -->
+            <div class="feature-card" id="card-3">
+                <div class="feature-left">
+                    <div class="accent-line"></div>
+                    <h2 class="feature-title">Spicy Chicken Sandwich</h2>
+                    <p class="feature-description">
+                        Crispy, juicy, and packed with flavor! Our Spicy Chicken Sandwich delivers
+                        the perfect kick with every bite.
+                    </p>
+                    <ul class="feature-highlights">
+                        <li>Perfectly crispy coating</li>
+                        <li>Juicy chicken breast</li>
+                        <li>Spicy seasoning blend</li>
+                        <li>Fresh toppings</li>
+                    </ul>
+                </div>
+                <div class="feature-right">
+                    <div class="feature-image" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23FF6347%22 width=%22400%22 height=%22300%22 rx=%2220%22/><text x=%22200%22 y=%22160%22 font-family=%22Arial%22 font-size=%2260%22 fill=%22white%22 text-anchor=%22middle%22>🍗</text></svg>')"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-dots">
+            <div class="dot" data-index="0"></div>
+            <div class="dot" data-index="1"></div>
+            <div class="dot" data-index="2"></div>
+            <div class="dot" data-index="3"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const cards = document.querySelectorAll('.feature-card');
+        const dots = document.querySelectorAll('.dot');
+        const totalCards = cards.length;
+
+        function showCard(index) {
+            // Hide all cards
+            cards.forEach(card => card.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            // Show current card
+            cards[index].classList.add('active');
+            dots[index].classList.add('active');
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % totalCards;
+            showCard(currentIndex);
+        }
+
+        // Initialize
+        showCard(0);
+
+        // Auto-rotate every 7 seconds
+        setInterval(nextCard, 7000);
+
+        // Optional: Click dots to jump to specific card
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentIndex = index;
+                showCard(currentIndex);
+            });
+        });
+    </script>
+</body>
+</html>
