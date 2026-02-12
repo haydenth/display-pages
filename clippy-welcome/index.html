@@ -35,8 +35,8 @@
         }
 
         .clippy {
-            width: 250px;
-            height: 300px;
+            width: 200px;
+            height: 320px;
             position: relative;
             animation: bounce 2s ease-in-out infinite;
             filter: drop-shadow(3px 3px 2px rgba(0,0,0,0.3));
@@ -184,61 +184,82 @@
     <div class="desktop">
         <!-- Clippy and Speech Bubble -->
         <div class="clippy-wrapper">
-            <svg class="clippy" viewBox="0 0 180 280">
+            <svg class="clippy" viewBox="0 0 200 320">
                 <defs>
-                    <linearGradient id="clipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#A0A8C8;stop-opacity:1" />
-                        <stop offset="40%" style="stop-color:#C8D0E8;stop-opacity:1" />
+                    <!-- Main paperclip gradient -->
+                    <linearGradient id="clipGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#7880A0;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#C8D0E8;stop-opacity:1" />
                         <stop offset="100%" style="stop-color:#7880A0;stop-opacity:1" />
+                    </linearGradient>
+                    <!-- Highlight gradient -->
+                    <linearGradient id="clipHighlight" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#E0E8FF;stop-opacity:0.9" />
+                        <stop offset="100%" style="stop-color:#E0E8FF;stop-opacity:0.3" />
                     </linearGradient>
                 </defs>
 
                 <g id="clippy-body">
-                    <!-- CONTINUOUS PAPERCLIP WIRE - one path! -->
-                    <path d="M 60 25
-                             Q 40 25 40 50
-                             L 40 200
-                             Q 40 225 60 225
-                             Q 80 225 80 200
-                             L 80 55
-                             Q 80 35 100 35
-                             Q 120 35 120 55
-                             L 120 195
-                             Q 120 215 100 215
-                             Q 85 215 85 200"
-                          fill="none" stroke="url(#clipGrad)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- MAIN PAPERCLIP WIRE - one continuous path forming overlapping loops -->
+                    <path d="M 50 80
+                             L 50 240
+                             Q 50 265 70 265
+                             Q 90 265 90 240
+                             L 90 80
+                             Q 90 60 110 60
+                             Q 130 60 130 80
+                             L 130 220
+                             Q 130 245 110 245
+                             Q 95 245 95 230
+                             L 95 100"
+                          fill="none" stroke="url(#clipGrad)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
 
-                    <!-- Highlight shine on the wire -->
-                    <path d="M 60 30
-                             Q 45 30 45 50
-                             L 45 200
-                             Q 45 218 58 220"
-                          fill="none" stroke="#E0E8FF" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+                    <!-- Left edge highlight on the wire -->
+                    <path d="M 55 85
+                             L 55 240
+                             Q 55 260 68 262"
+                          fill="none" stroke="url(#clipHighlight)" stroke-width="6" stroke-linecap="round" opacity="0.8"/>
 
-                    <!-- LEFT EYE at top of left loop -->
+                    <!-- Right edge highlight on the wire -->
+                    <path d="M 125 85
+                             L 125 220
+                             Q 125 238 113 241"
+                          fill="none" stroke="url(#clipHighlight)" stroke-width="6" stroke-linecap="round" opacity="0.8"/>
+
+                    <!-- LEFT EYE STEM -->
+                    <line x1="70" y1="80" x2="70" y2="35" stroke="url(#clipGrad)" stroke-width="12" stroke-linecap="round"/>
+                    <line x1="72" y1="80" x2="72" y2="38" stroke="#E0E8FF" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+
+                    <!-- RIGHT EYE STEM -->
+                    <line x1="110" y1="80" x2="110" y2="35" stroke="url(#clipGrad)" stroke-width="12" stroke-linecap="round"/>
+                    <line x1="112" y1="80" x2="112" y2="38" stroke="#E0E8FF" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+
+                    <!-- LEFT EYE -->
                     <g id="left-eye">
-                        <circle cx="70" cy="50" r="20" fill="#fff" stroke="#000" stroke-width="2.5"/>
-                        <ellipse id="left-pupil" cx="72" cy="52" rx="9" ry="11" fill="#000">
-                            <animate attributeName="cy" values="52;50;52" dur="3s" repeatCount="indefinite"/>
+                        <circle cx="70" cy="25" r="22" fill="#fff" stroke="#000" stroke-width="2.5"/>
+                        <ellipse id="left-pupil" cx="72" cy="27" rx="10" ry="13" fill="#000">
+                            <animate attributeName="cy" values="27;25;27" dur="3s" repeatCount="indefinite"/>
                         </ellipse>
-                        <circle cx="67" cy="47" r="5" fill="#fff"/>
+                        <circle cx="67" cy="21" r="6" fill="#fff"/>
                     </g>
 
-                    <!-- RIGHT EYE at top of right loop -->
+                    <!-- RIGHT EYE -->
                     <g id="right-eye">
-                        <circle cx="110" cy="55" r="20" fill="#fff" stroke="#000" stroke-width="2.5"/>
-                        <ellipse id="right-pupil" cx="112" cy="57" rx="9" ry="11" fill="#000">
-                            <animate attributeName="cy" values="57;55;57" dur="3s" repeatCount="indefinite"/>
+                        <circle cx="110" cy="25" r="22" fill="#fff" stroke="#000" stroke-width="2.5"/>
+                        <ellipse id="right-pupil" cx="112" cy="27" rx="10" ry="13" fill="#000">
+                            <animate attributeName="cy" values="27;25;27" dur="3s" repeatCount="indefinite"/>
                         </ellipse>
-                        <circle cx="107" cy="52" r="5" fill="#fff"/>
+                        <circle cx="107" cy="21" r="6" fill="#fff"/>
                     </g>
 
-                    <!-- EYEBROWS above the eyes -->
-                    <path d="M 52 38 Q 65 33 78 38" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round">
-                        <animate attributeName="d" values="M 52 38 Q 65 33 78 38;M 52 35 Q 65 30 78 35;M 52 38 Q 65 33 78 38" dur="4s" repeatCount="indefinite"/>
+                    <!-- LEFT EYEBROW -->
+                    <path d="M 50 8 Q 70 3 85 8" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round">
+                        <animate attributeName="d" values="M 50 8 Q 70 3 85 8;M 50 5 Q 70 0 85 5;M 50 8 Q 70 3 85 8" dur="4s" repeatCount="indefinite"/>
                     </path>
-                    <path d="M 92 43 Q 105 38 118 43" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round">
-                        <animate attributeName="d" values="M 92 43 Q 105 38 118 43;M 92 40 Q 105 35 118 40;M 92 43 Q 105 38 118 43" dur="4s" repeatCount="indefinite"/>
+
+                    <!-- RIGHT EYEBROW -->
+                    <path d="M 95 8 Q 110 3 125 8" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round">
+                        <animate attributeName="d" values="M 95 8 Q 110 3 125 8;M 95 5 Q 110 0 125 5;M 95 8 Q 110 3 125 8" dur="4s" repeatCount="indefinite"/>
                     </path>
                 </g>
             </svg>
