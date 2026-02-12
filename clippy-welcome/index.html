@@ -13,192 +13,330 @@
 
         body {
             background: #008080;
-            font-family: 'MS Sans Serif', Arial, sans-serif;
+            font-family: 'MS Sans Serif', 'Microsoft Sans Serif', Arial, sans-serif;
             overflow: hidden;
             height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 11px;
         }
 
-        .container {
+        .desktop {
             position: relative;
             width: 100%;
-            height: 100%;
+            height: 100vh;
+            padding-bottom: 40px;
         }
 
+        /* Desktop Icons */
+        .desktop-icons {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80px;
+            cursor: pointer;
+        }
+
+        .icon-image {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+        }
+
+        .icon-label {
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* Clippy Container */
         .clippy-wrapper {
             position: absolute;
             left: 50%;
-            top: 50%;
+            top: 45%;
             transform: translate(-50%, -50%);
         }
 
         .clippy {
-            width: 300px;
-            height: 350px;
+            width: 250px;
+            height: 300px;
             position: relative;
             animation: bounce 2s ease-in-out infinite;
+            filter: drop-shadow(3px 3px 2px rgba(0,0,0,0.3));
         }
 
         @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
         }
 
+        /* Speech Bubble */
         .speech-bubble {
             position: absolute;
-            left: 320px;
-            top: 50px;
+            left: 270px;
+            top: 40px;
             background: #FFFFCC;
             border: 2px solid #000;
-            border-radius: 8px;
-            padding: 25px 30px;
-            min-width: 450px;
-            max-width: 600px;
-            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
+            padding: 20px 25px;
+            min-width: 400px;
+            max-width: 550px;
+            box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
         }
 
         .speech-bubble::before {
             content: '';
             position: absolute;
-            left: -20px;
-            top: 60px;
+            left: -22px;
+            top: 50px;
             width: 0;
             height: 0;
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-            border-right: 20px solid #000;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-right: 22px solid #000;
         }
 
         .speech-bubble::after {
             content: '';
             position: absolute;
-            left: -16px;
-            top: 62px;
+            left: -18px;
+            top: 52px;
             width: 0;
             height: 0;
-            border-top: 13px solid transparent;
-            border-bottom: 13px solid transparent;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
             border-right: 18px solid #FFFFCC;
         }
 
         .speech-text {
-            font-size: 24px;
+            font-size: 20px;
             color: #000;
-            line-height: 1.4;
-            margin-bottom: 15px;
+            line-height: 1.5;
+            margin-bottom: 12px;
         }
 
         .speech-name {
-            font-size: 18px;
+            font-size: 15px;
             color: #666;
             font-style: italic;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
-        .clock-container {
+        /* Windows 95 Window */
+        .window {
             position: absolute;
+            background: #C0C0C0;
+            border-top: 2px solid #fff;
+            border-left: 2px solid #fff;
+            border-right: 2px solid #000;
+            border-bottom: 2px solid #000;
+            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+        }
+
+        .window-titlebar {
+            background: linear-gradient(to right, #000080, #1084D0);
+            padding: 3px 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .window-title {
+            color: #fff;
+            font-weight: bold;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 2px;
+        }
+
+        .window-button {
+            width: 18px;
+            height: 16px;
+            background: #C0C0C0;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #000;
+            border-bottom: 1px solid #000;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .window-content {
+            padding: 15px;
+            background: #C0C0C0;
+        }
+
+        .clock-window {
             top: 30px;
             right: 30px;
-            background: #C0C0C0;
-            border: 3px ridge #fff;
-            padding: 20px 30px;
-            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
-        }
-
-        .clock-title {
-            background: #000080;
-            color: #fff;
-            padding: 5px 10px;
-            margin: -20px -30px 15px -30px;
-            font-weight: bold;
-            font-size: 16px;
+            min-width: 220px;
         }
 
         .time {
-            font-size: 48px;
+            font-size: 42px;
             font-weight: bold;
             color: #000;
             font-family: 'Courier New', monospace;
             text-align: center;
+            padding: 10px;
+            background: #fff;
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            border-right: 2px solid #fff;
+            border-bottom: 2px solid #fff;
         }
 
         .date {
-            font-size: 20px;
+            font-size: 14px;
             color: #000;
             text-align: center;
-            margin-top: 8px;
+            margin-top: 10px;
         }
 
-        @keyframes blink {
-            0%, 49%, 100% {
-                opacity: 1;
-            }
-            50%, 99% {
-                opacity: 0;
-            }
+        /* Taskbar */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: #C0C0C0;
+            border-top: 2px solid #fff;
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.2);
+        }
+
+        .start-button {
+            height: 32px;
+            padding: 0 15px;
+            background: #C0C0C0;
+            border-top: 2px solid #fff;
+            border-left: 2px solid #fff;
+            border-right: 2px solid #000;
+            border-bottom: 2px solid #000;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .start-button:active {
+            border-top: 2px solid #000;
+            border-left: 2px solid #000;
+            border-right: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+        }
+
+        .windows-logo {
+            width: 20px;
+            height: 20px;
+        }
+
+        .taskbar-divider {
+            width: 2px;
+            height: 32px;
+            background: #808080;
+            margin: 0 5px;
+            border-left: 1px solid #000;
+            border-right: 1px solid #fff;
+        }
+
+        .system-tray {
+            margin-left: auto;
+            height: 28px;
+            padding: 0 10px;
+            border-top: 1px solid #808080;
+            border-left: 1px solid #808080;
+            border-right: 1px solid #fff;
+            border-bottom: 1px solid #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .tray-time {
+            font-family: 'MS Sans Serif', Arial, sans-serif;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="desktop">
+        <!-- Desktop Icons -->
+        <div class="desktop-icons">
+            <div class="desktop-icon">
+                <svg class="icon-image" viewBox="0 0 48 48">
+                    <rect x="8" y="12" width="28" height="24" fill="#C0C0C0" stroke="#000" stroke-width="2"/>
+                    <rect x="12" y="16" width="8" height="6" fill="#000080"/>
+                    <rect x="22" y="16" width="8" height="6" fill="#000080"/>
+                    <rect x="12" y="24" width="8" height="6" fill="#000080"/>
+                    <rect x="22" y="24" width="8" height="6" fill="#000080"/>
+                </svg>
+                <div class="icon-label">My Computer</div>
+            </div>
+            <div class="desktop-icon">
+                <svg class="icon-image" viewBox="0 0 48 48">
+                    <rect x="10" y="18" width="24" height="20" fill="#C0C0C0" stroke="#000" stroke-width="2"/>
+                    <path d="M 15 18 L 10 12 L 34 12 L 29 18 Z" fill="#808080" stroke="#000" stroke-width="2"/>
+                </svg>
+                <div class="icon-label">Recycle Bin</div>
+            </div>
+        </div>
+
+        <!-- Clippy and Speech Bubble -->
         <div class="clippy-wrapper">
-            <svg class="clippy" viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
-                <!-- Clippy body (paperclip) -->
+            <svg class="clippy" viewBox="0 0 200 250">
                 <g id="clippy-body">
-                    <!-- Outer loop -->
                     <path d="M 80 40 Q 50 40 50 70 L 50 180 Q 50 210 80 210 Q 110 210 110 180 L 110 90"
                           fill="none" stroke="#4A90E2" stroke-width="20" stroke-linecap="round"/>
-
-                    <!-- Inner loop -->
                     <path d="M 110 90 Q 110 60 140 60 Q 170 60 170 90 L 170 160 Q 170 190 140 190"
                           fill="none" stroke="#5AA4F0" stroke-width="20" stroke-linecap="round"/>
-
-                    <!-- Highlight shine -->
                     <path d="M 65 50 Q 60 50 60 70 L 60 180 Q 60 200 75 200"
                           fill="none" stroke="#A8D5FF" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
 
-                    <!-- Eyes container -->
                     <g id="eyes">
-                        <!-- Left eye background -->
                         <ellipse cx="75" cy="120" rx="18" ry="22" fill="#fff" stroke="#000" stroke-width="2"/>
-                        <!-- Left pupil -->
                         <ellipse id="left-pupil" cx="78" cy="123" rx="8" ry="10" fill="#000">
                             <animate attributeName="cy" values="123;120;123" dur="3s" repeatCount="indefinite"/>
                         </ellipse>
-                        <!-- Left shine -->
                         <circle cx="73" cy="118" r="4" fill="#fff"/>
 
-                        <!-- Right eye background -->
                         <ellipse cx="115" cy="120" rx="18" ry="22" fill="#fff" stroke="#000" stroke-width="2"/>
-                        <!-- Right pupil -->
                         <ellipse id="right-pupil" cx="118" cy="123" rx="8" ry="10" fill="#000">
                             <animate attributeName="cy" values="123;120;123" dur="3s" repeatCount="indefinite"/>
                         </ellipse>
-                        <!-- Right shine -->
                         <circle cx="113" cy="118" r="4" fill="#fff"/>
                     </g>
 
-                    <!-- Eyebrows -->
                     <g id="eyebrows">
                         <path d="M 60 105 Q 75 100 90 105" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round">
-                            <animate attributeName="d"
-                                     values="M 60 105 Q 75 100 90 105;M 60 100 Q 75 95 90 100;M 60 105 Q 75 100 90 105"
-                                     dur="4s" repeatCount="indefinite"/>
+                            <animate attributeName="d" values="M 60 105 Q 75 100 90 105;M 60 100 Q 75 95 90 100;M 60 105 Q 75 100 90 105" dur="4s" repeatCount="indefinite"/>
                         </path>
                         <path d="M 100 105 Q 115 100 130 105" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round">
-                            <animate attributeName="d"
-                                     values="M 100 105 Q 115 100 130 105;M 100 100 Q 115 95 130 100;M 100 105 Q 115 100 130 105"
-                                     dur="4s" repeatCount="indefinite"/>
+                            <animate attributeName="d" values="M 100 105 Q 115 100 130 105;M 100 100 Q 115 95 130 100;M 100 105 Q 115 100 130 105" dur="4s" repeatCount="indefinite"/>
                         </path>
                     </g>
 
-                    <!-- Smile -->
                     <path d="M 70 145 Q 95 155 120 145" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"/>
                 </g>
             </svg>
@@ -211,10 +349,39 @@
             </div>
         </div>
 
-        <div class="clock-container">
-            <div class="clock-title">Current Time</div>
-            <div class="time" id="time">00:00:00</div>
-            <div class="date" id="date">Loading...</div>
+        <!-- Clock Window -->
+        <div class="window clock-window">
+            <div class="window-titlebar">
+                <div class="window-title">
+                    <span>⏰</span> Current Time
+                </div>
+                <div class="window-controls">
+                    <div class="window-button">_</div>
+                    <div class="window-button">□</div>
+                    <div class="window-button">×</div>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="time" id="time">00:00:00</div>
+                <div class="date" id="date">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Windows 95 Taskbar -->
+        <div class="taskbar">
+            <div class="start-button">
+                <svg class="windows-logo" viewBox="0 0 20 20">
+                    <path d="M 0 0 L 8 0 L 8 8 L 0 8 Z" fill="#FF0000"/>
+                    <path d="M 10 0 L 20 0 L 20 8 L 10 8 Z" fill="#00FF00"/>
+                    <path d="M 0 10 L 8 10 L 8 20 L 0 20 Z" fill="#0000FF"/>
+                    <path d="M 10 10 L 20 10 L 20 20 L 10 20 Z" fill="#FFFF00"/>
+                </svg>
+                Start
+            </div>
+            <div class="taskbar-divider"></div>
+            <div class="system-tray">
+                <span class="tray-time" id="tray-time">12:00 PM</span>
+            </div>
         </div>
     </div>
 
@@ -239,7 +406,6 @@
         function updateMessage() {
             const messageEl = document.getElementById('message');
             messageEl.style.opacity = 0;
-
             setTimeout(() => {
                 currentMessageIndex = (currentMessageIndex + 1) % messages.length;
                 messageEl.textContent = messages[currentMessageIndex];
@@ -247,20 +413,19 @@
             }, 500);
         }
 
-        // Rotate messages every 8 seconds
         setInterval(updateMessage, 8000);
 
-        // Clock update
         function updateClock() {
             const now = new Date();
-
-            // Time
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
             document.getElementById('time').textContent = `${hours}:${minutes}:${seconds}`;
 
-            // Date
+            const hours12 = now.getHours() % 12 || 12;
+            const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+            document.getElementById('tray-time').textContent = `${hours12}:${String(now.getMinutes()).padStart(2, '0')} ${ampm}`;
+
             const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             const dayName = days[now.getDay()];
@@ -273,7 +438,6 @@
         updateClock();
         setInterval(updateClock, 1000);
 
-        // Fade transition for messages
         document.getElementById('message').style.transition = 'opacity 0.5s ease';
     </script>
 </body>
