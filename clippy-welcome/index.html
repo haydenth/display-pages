@@ -179,9 +179,9 @@
         }
 
         .countdown-window {
-            bottom: 30px;
-            right: 30px;
+            position: absolute;
             min-width: 320px;
+            /* Starting position - will be set by JavaScript */
         }
 
         .countdown {
@@ -409,34 +409,126 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
-        // Bouncing clock window (like DVD screensaver)
+        // Bouncing windows with collision detection
         const clockWindow = document.querySelector('.clock-window');
-        let x = Math.random() * (window.innerWidth - 250);
-        let y = Math.random() * (window.innerHeight - 150);
-        let dx = 2;
-        let dy = 2;
+        const countdownWindow = document.querySelector('.countdown-window');
 
-        function bounceClock() {
-            const rect = clockWindow.getBoundingClientRect();
+        // Clock window state
+        let clock = {
+            x: Math.random() * (window.innerWidth - 250),
+            y: Math.random() * (window.innerHeight - 200),
+            dx: 2,
+            dy: 1.5,
+            element: clockWindow
+        };
 
-            x += dx;
-            y += dy;
+        // Countdown window state
+        let countdown = {
+            x: Math.random() * (window.innerWidth - 350),
+            y: Math.random() * (window.innerHeight - 250),
+            dx: -1.8,
+            dy: -2.2,
+            element: countdownWindow
+        };
 
-            // Bounce off edges
-            if (x + rect.width >= window.innerWidth || x <= 0) {
-                dx = -dx;
-            }
-            if (y + rect.height >= window.innerHeight || y <= 0) {
-                dy = -dy;
-            }
-
-            clockWindow.style.left = x + 'px';
-            clockWindow.style.top = y + 'px';
-
-            requestAnimationFrame(bounceClock);
+        function checkCollision(rect1, rect2) {
+            return !(rect1.right < rect2.left ||
+                     rect1.left > rect2.right ||
+                     rect1.bottom < rect2.top ||
+                     rect1.top > rect2.bottom);
         }
 
-        bounceClock();
+        function bounceWindows() {
+            // Update positions
+            clock.x += clock.dx;
+            clock.y += clock.dy;
+            countdown.x += countdown.dx;
+            countdown.y += countdown.dy;
+
+            const clockRect = {
+                left: clock.x,
+                top: clock.y,
+                right: clock.x + clockWindow.offsetWidth,
+                bottom: clock.y + clockWindow.offsetHeight,
+                width: clockWindow.offsetWidth,
+                height: clockWindow.offsetHeight
+            };
+
+            const countdownRect = {
+                left: countdown.x,
+                top: countdown.y,
+                right: countdown.x + countdownWindow.offsetWidth,
+                bottom: countdown.y + countdownWindow.offsetHeight,
+                width: countdownWindow.offsetWidth,
+                height: countdownWindow.offsetHeight
+            };
+
+            // Check collision between windows
+            if (checkCollision(clockRect, countdownRect)) {
+                // Calculate overlap on each axis
+                const overlapX = Math.min(clockRect.right - countdownRect.left,
+                                         countdownRect.right - clockRect.left);
+                const overlapY = Math.min(clockRect.bottom - countdownRect.top,
+                                         countdownRect.bottom - clockRect.top);
+
+                // Bounce based on smallest overlap (most likely collision axis)
+                if (overlapX < overlapY) {
+                    // Horizontal collision
+                    clock.dx = -clock.dx;
+                    countdown.dx = -countdown.dx;
+                    // Separate them
+                    if (clock.x < countdown.x) {
+                        clock.x -= overlapX / 2;
+                        countdown.x += overlapX / 2;
+                    } else {
+                        clock.x += overlapX / 2;
+                        countdown.x -= overlapX / 2;
+                    }
+                } else {
+                    // Vertical collision
+                    clock.dy = -clock.dy;
+                    countdown.dy = -countdown.dy;
+                    // Separate them
+                    if (clock.y < countdown.y) {
+                        clock.y -= overlapY / 2;
+                        countdown.y += overlapY / 2;
+                    } else {
+                        clock.y += overlapY / 2;
+                        countdown.y -= overlapY / 2;
+                    }
+                }
+            }
+
+            // Bounce clock off screen edges
+            if (clock.x + clockRect.width >= window.innerWidth || clock.x <= 0) {
+                clock.dx = -clock.dx;
+                clock.x = Math.max(0, Math.min(clock.x, window.innerWidth - clockRect.width));
+            }
+            if (clock.y + clockRect.height >= window.innerHeight || clock.y <= 0) {
+                clock.dy = -clock.dy;
+                clock.y = Math.max(0, Math.min(clock.y, window.innerHeight - clockRect.height));
+            }
+
+            // Bounce countdown off screen edges
+            if (countdown.x + countdownRect.width >= window.innerWidth || countdown.x <= 0) {
+                countdown.dx = -countdown.dx;
+                countdown.x = Math.max(0, Math.min(countdown.x, window.innerWidth - countdownRect.width));
+            }
+            if (countdown.y + countdownRect.height >= window.innerHeight || countdown.y <= 0) {
+                countdown.dy = -countdown.dy;
+                countdown.y = Math.max(0, Math.min(countdown.y, window.innerHeight - countdownRect.height));
+            }
+
+            // Update DOM positions
+            clockWindow.style.left = clock.x + 'px';
+            clockWindow.style.top = clock.y + 'px';
+            countdownWindow.style.left = countdown.x + 'px';
+            countdownWindow.style.top = countdown.y + 'px';
+
+            requestAnimationFrame(bounceWindows);
+        }
+
+        bounceWindows();
 
         document.getElementById('message').style.transition = 'opacity 0.5s ease';
     </script>
