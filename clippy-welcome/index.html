@@ -216,6 +216,28 @@
             z-index: 9999;
         }
 
+        .info-window {
+            bottom: 30px;
+            left: 30px;
+            min-width: 380px;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: #000;
+            line-height: 1.6;
+            padding: 10px;
+            background: #fff;
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            border-right: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+        }
+
+        .info-text strong {
+            color: #000080;
+        }
+
     </style>
 </head>
 <body>
@@ -346,6 +368,30 @@
             <div class="window-content">
                 <div class="countdown-label">Countdown until Tom Returns from Vacation</div>
                 <div class="countdown" id="countdown">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Info Window -->
+        <div class="window info-window">
+            <div class="window-titlebar">
+                <div class="window-title">
+                    <span>ℹ️</span> About This Display
+                </div>
+                <div class="window-controls">
+                    <div class="window-button">_</div>
+                    <div class="window-button">□</div>
+                    <div class="window-button">×</div>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="info-text">
+                    <strong>Created with:</strong><br>
+                    • Claude Code CLI<br>
+                    • Claude Opus 4.6<br>
+                    • MCP (Model Context Protocol)<br>
+                    • LG ConnectedCare API<br><br>
+                    <strong>Deployed to LG commercial displays via automated MCP integration.</strong>
+                </div>
             </div>
         </div>
 
