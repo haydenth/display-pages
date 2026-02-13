@@ -5,6 +5,12 @@ const ctx = canvas.getContext('2d', { alpha: false });
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    // Reposition Clippy on resize
+    if (window.clippy) {
+        window.clippy.x = window.innerWidth * 0.35;
+        window.clippy.y = window.innerHeight * 0.5;
+        updateSpeechBubble();
+    }
 }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
@@ -359,12 +365,23 @@ setInterval(() => {
     }, 500);
 }, 8000);
 
+// Update speech bubble position relative to Clippy
+function updateSpeechBubble() {
+    const speechBubble = document.getElementById('speechBubble');
+    if (window.clippy) {
+        speechBubble.style.left = (window.clippy.x + 250) + 'px';
+        speechBubble.style.top = (window.clippy.y - 60) + 'px';
+        speechBubble.style.transform = 'none';
+    }
+}
+
 // Initialize
-const clippy = new Clippy(window.innerWidth * 0.5 - 200, window.innerHeight * 0.45);
+window.clippy = new Clippy(window.innerWidth * 0.35, window.innerHeight * 0.5);
 updateClock();
 updateCountdown();
 setInterval(updateClock, 1000);
 setInterval(updateCountdown, 1000);
+updateSpeechBubble();
 
 // Main animation loop
 let lastTime = performance.now();
@@ -373,13 +390,13 @@ function animate(currentTime) {
     const dt = Math.min((currentTime - lastTime) / 1000, 0.1);
     lastTime = currentTime;
 
-    // Clear canvas
+    // Clear canvas with background color
     ctx.fillStyle = '#008080';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Update and draw clippy
-    clippy.update(dt);
-    clippy.draw();
+    window.clippy.update(dt);
+    window.clippy.draw();
 
     // Update windows
     updateWindows(dt);
