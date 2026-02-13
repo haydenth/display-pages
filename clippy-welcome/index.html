@@ -178,6 +178,34 @@
             margin-top: 10px;
         }
 
+        .countdown-window {
+            top: 180px;
+            right: 30px;
+            min-width: 320px;
+        }
+
+        .countdown {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding: 15px;
+            background: #fff;
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            border-right: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+        }
+
+        .countdown-label {
+            font-size: 13px;
+            color: #000;
+            text-align: center;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 <body>
@@ -290,6 +318,24 @@
             </div>
         </div>
 
+        <!-- Countdown Window -->
+        <div class="window countdown-window">
+            <div class="window-titlebar">
+                <div class="window-title">
+                    <span>⏳</span> Vacation Countdown
+                </div>
+                <div class="window-controls">
+                    <div class="window-button">_</div>
+                    <div class="window-button">□</div>
+                    <div class="window-button">×</div>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="countdown-label">Countdown until Tom Returns from Vacation</div>
+                <div class="countdown" id="countdown">Loading...</div>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -337,6 +383,31 @@
 
         updateClock();
         setInterval(updateClock, 1000);
+
+        // Countdown to Tom's return from vacation
+        function updateCountdown() {
+            // Target: February 19, 2026 at 9:00 AM Central Time
+            const targetDate = new Date('2026-02-19T09:00:00-06:00'); // CST/CDT offset
+            const now = new Date();
+
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                document.getElementById('countdown').textContent = 'Tom is back!';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').textContent =
+                `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
 
         document.getElementById('message').style.transition = 'opacity 0.5s ease';
     </script>
