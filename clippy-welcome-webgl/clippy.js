@@ -1,6 +1,13 @@
-// Canvas setup
+// Canvas setup with performance optimizations
 const canvas = document.getElementById('mainCanvas');
-const ctx = canvas.getContext('2d', { alpha: false });
+const ctx = canvas.getContext('2d', {
+    alpha: false,
+    desynchronized: true,  // Reduce latency
+    willReadFrequently: false  // Optimize for frequent writes
+});
+
+// Disable image smoothing for crisper rendering
+ctx.imageSmoothingEnabled = false;
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -157,9 +164,16 @@ class Clippy {
     }
 }
 
-// Spark particle system
+// Spark particle system with optimizations
+const SPARK_COLORS = ['#FFD700', '#FFA500', '#FF6347', '#FF1493', '#00FFFF'];
+const MAX_SPARKS = 100; // Limit total sparks for performance
+
 class Spark {
     constructor(x, y) {
+        this.reset(x, y);
+    }
+
+    reset(x, y) {
         this.x = x;
         this.y = y;
         this.vx = (Math.random() - 0.5) * 8;
@@ -167,12 +181,13 @@ class Spark {
         this.life = 1;
         this.decay = Math.random() * 0.02 + 0.015;
         this.size = Math.random() * 4 + 2;
-        this.color = ['#FFD700', '#FFA500', '#FF6347', '#FF1493', '#00FFFF'][Math.floor(Math.random() * 5)];
+        this.colorIndex = Math.floor(Math.random() * SPARK_COLORS.length);
     }
 
     update(dt) {
-        this.x += this.vx * dt * 60;
-        this.y += this.vy * dt * 60;
+        const speed = dt * 60;
+        this.x += this.vx * speed;
+        this.y += this.vy * speed;
         this.life -= this.decay;
         this.vx *= 0.98;
         this.vy *= 0.98;
@@ -180,15 +195,13 @@ class Spark {
     }
 
     draw() {
-        ctx.save();
         ctx.globalAlpha = this.life;
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = SPARK_COLORS[this.colorIndex];
         ctx.shadowBlur = 10;
-        ctx.shadowColor = this.color;
+        ctx.shadowColor = SPARK_COLORS[this.colorIndex];
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size * this.life, 0, Math.PI * 2);
         ctx.fill();
-        ctx.restore();
     }
 }
 
@@ -249,8 +262,9 @@ function updateWindows(dt) {
         const collisionY = (Math.max(clockRect.top, countdownRect.top) +
                            Math.min(clockRect.bottom, countdownRect.bottom)) / 2;
 
-        // Create sparks
-        for (let i = 0; i < 25; i++) {
+        // Create sparks (limit to MAX_SPARKS total)
+        const sparksToCreate = Math.min(25, MAX_SPARKS - sparks.length);
+        for (let i = 0; i < sparksToCreate; i++) {
             sparks.push(new Spark(collisionX, collisionY));
         }
 
@@ -380,16 +394,21 @@ function updateSpeechBubble() {
 window.clippy = new Clippy(window.innerWidth * 0.40, window.innerHeight * 0.5);
 updateClock();
 updateCountdown();
-setInterval(updateClock, 1000);
-setInterval(updateCountdown, 1000);
+// Update clock/countdown every second (reduces DOM operations)
+setInterval(() => {
+    updateClock();
+    updateCountdown();
+}, 1000);
 updateSpeechBubble();
 
-// Main animation loop
+// Main animation loop with optimizations
 let lastTime = performance.now();
+let frameCount = 0;
 
 function animate(currentTime) {
     const dt = Math.min((currentTime - lastTime) / 1000, 0.1);
     lastTime = currentTime;
+    frameCount++;
 
     // Clear canvas with background color
     ctx.fillStyle = '#008080';
@@ -402,14 +421,21 @@ function animate(currentTime) {
     // Update windows
     updateWindows(dt);
 
-    // Update and draw sparks
-    for (let i = sparks.length - 1; i >= 0; i--) {
-        if (!sparks[i].update(dt)) {
-            sparks.splice(i, 1);
-        } else {
-            sparks[i].draw();
+    // Update and draw sparks with batched rendering
+    if (sparks.length > 0) {
+        ctx.save();
+        for (let i = sparks.length - 1; i >= 0; i--) {
+            if (!sparks[i].update(dt)) {
+                sparks.splice(i, 1);
+            } else {
+                sparks[i].draw();
+            }
         }
+        ctx.restore();
     }
+
+    // Reset shadow blur to avoid affecting other renders
+    ctx.shadowBlur = 0;
 
     requestAnimationFrame(animate);
 }
