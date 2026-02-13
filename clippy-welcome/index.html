@@ -152,9 +152,9 @@
         }
 
         .clock-window {
-            top: 30px;
-            right: 30px;
+            position: absolute;
             min-width: 220px;
+            /* Starting position - will be set by JavaScript */
         }
 
         .time {
@@ -179,7 +179,7 @@
         }
 
         .countdown-window {
-            top: 180px;
+            bottom: 30px;
             right: 30px;
             min-width: 320px;
         }
@@ -408,6 +408,35 @@
 
         updateCountdown();
         setInterval(updateCountdown, 1000);
+
+        // Bouncing clock window (like DVD screensaver)
+        const clockWindow = document.querySelector('.clock-window');
+        let x = Math.random() * (window.innerWidth - 250);
+        let y = Math.random() * (window.innerHeight - 150);
+        let dx = 2;
+        let dy = 2;
+
+        function bounceClock() {
+            const rect = clockWindow.getBoundingClientRect();
+
+            x += dx;
+            y += dy;
+
+            // Bounce off edges
+            if (x + rect.width >= window.innerWidth || x <= 0) {
+                dx = -dx;
+            }
+            if (y + rect.height >= window.innerHeight || y <= 0) {
+                dy = -dy;
+            }
+
+            clockWindow.style.left = x + 'px';
+            clockWindow.style.top = y + 'px';
+
+            requestAnimationFrame(bounceClock);
+        }
+
+        bounceClock();
 
         document.getElementById('message').style.transition = 'opacity 0.5s ease';
     </script>
