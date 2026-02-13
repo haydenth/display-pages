@@ -369,8 +369,9 @@ setInterval(() => {
 function updateSpeechBubble() {
     const speechBubble = document.getElementById('speechBubble');
     if (window.clippy) {
-        speechBubble.style.left = (window.clippy.x + 200) + 'px';
-        speechBubble.style.top = (window.clippy.y - 60) + 'px';
+        // Position speech bubble directly to the right of Clippy, aligned with his center
+        speechBubble.style.left = (window.clippy.x + 80) + 'px';
+        speechBubble.style.top = (window.clippy.y - 80) + 'px';
         speechBubble.style.transform = 'none';
     }
 }
