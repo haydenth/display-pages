@@ -206,10 +206,23 @@
             font-weight: bold;
         }
 
+        #sparkCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
     </style>
 </head>
 <body>
     <div class="desktop">
+        <!-- Spark Effect Canvas -->
+        <canvas id="sparkCanvas"></canvas>
+
         <!-- Clippy and Speech Bubble -->
         <div class="clippy-wrapper">
             <svg class="clippy" viewBox="0 0 200 320">
@@ -409,6 +422,73 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
+        // Spark effect canvas setup
+        const sparkCanvas = document.getElementById('sparkCanvas');
+        const sparkCtx = sparkCanvas.getContext('2d');
+        sparkCanvas.width = window.innerWidth;
+        sparkCanvas.height = window.innerHeight;
+
+        const sparks = [];
+
+        class Spark {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 8;
+                this.vy = (Math.random() - 0.5) * 8;
+                this.life = 1;
+                this.decay = Math.random() * 0.02 + 0.015;
+                this.size = Math.random() * 4 + 2;
+                this.color = ['#FFD700', '#FFA500', '#FF6347', '#FF1493', '#00FFFF'][Math.floor(Math.random() * 5)];
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= this.decay;
+                this.vx *= 0.98;
+                this.vy *= 0.98;
+                return this.life > 0;
+            }
+
+            draw() {
+                sparkCtx.save();
+                sparkCtx.globalAlpha = this.life;
+                sparkCtx.fillStyle = this.color;
+                sparkCtx.beginPath();
+                sparkCtx.arc(this.x, this.y, this.size * this.life, 0, Math.PI * 2);
+                sparkCtx.fill();
+
+                // Glow effect
+                sparkCtx.shadowBlur = 10;
+                sparkCtx.shadowColor = this.color;
+                sparkCtx.fill();
+                sparkCtx.restore();
+            }
+        }
+
+        function createSparks(x, y, count = 20) {
+            for (let i = 0; i < count; i++) {
+                sparks.push(new Spark(x, y));
+            }
+        }
+
+        function animateSparks() {
+            sparkCtx.clearRect(0, 0, sparkCanvas.width, sparkCanvas.height);
+
+            for (let i = sparks.length - 1; i >= 0; i--) {
+                if (!sparks[i].update()) {
+                    sparks.splice(i, 1);
+                } else {
+                    sparks[i].draw();
+                }
+            }
+
+            requestAnimationFrame(animateSparks);
+        }
+
+        animateSparks();
+
         // Bouncing windows with collision detection
         const clockWindow = document.querySelector('.clock-window');
         const countdownWindow = document.querySelector('.countdown-window');
@@ -465,6 +545,15 @@
 
             // Check collision between windows
             if (checkCollision(clockRect, countdownRect)) {
+                // Calculate collision point (center of overlap)
+                const collisionX = (Math.max(clockRect.left, countdownRect.left) +
+                                   Math.min(clockRect.right, countdownRect.right)) / 2;
+                const collisionY = (Math.max(clockRect.top, countdownRect.top) +
+                                   Math.min(clockRect.bottom, countdownRect.bottom)) / 2;
+
+                // Create spark effect at collision point
+                createSparks(collisionX, collisionY, 25);
+
                 // Calculate overlap on each axis
                 const overlapX = Math.min(clockRect.right - countdownRect.left,
                                          countdownRect.right - clockRect.left);
