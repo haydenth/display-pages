@@ -7,7 +7,7 @@ function resizeCanvas() {
     canvas.height = window.innerHeight;
     // Reposition Clippy on resize
     if (window.clippy) {
-        window.clippy.x = window.innerWidth * 0.35;
+        window.clippy.x = window.innerWidth * 0.40;
         window.clippy.y = window.innerHeight * 0.5;
         updateSpeechBubble();
     }
@@ -369,14 +369,14 @@ setInterval(() => {
 function updateSpeechBubble() {
     const speechBubble = document.getElementById('speechBubble');
     if (window.clippy) {
-        speechBubble.style.left = (window.clippy.x + 250) + 'px';
+        speechBubble.style.left = (window.clippy.x + 200) + 'px';
         speechBubble.style.top = (window.clippy.y - 60) + 'px';
         speechBubble.style.transform = 'none';
     }
 }
 
-// Initialize
-window.clippy = new Clippy(window.innerWidth * 0.35, window.innerHeight * 0.5);
+// Initialize - position Clippy centered
+window.clippy = new Clippy(window.innerWidth * 0.40, window.innerHeight * 0.5);
 updateClock();
 updateCountdown();
 setInterval(updateClock, 1000);
